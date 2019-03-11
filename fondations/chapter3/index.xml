@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Chapitre 3 : Quels objets en python ? on Python site</title>
+    <link>https://JulieDjidji.github.io/fondations/chapter3/</link>
+    <description>Recent content in Chapitre 3 : Quels objets en python ? on Python site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Jan 2019 14:15:59 -0600</lastBuildDate>
+    
+	<atom:link href="https://JulieDjidji.github.io/fondations/chapter3/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Les principaux types de données : entiers, flottants, chaînes de caractère</title>
+      <link>https://JulieDjidji.github.io/fondations/chapter3/1-typessimples/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://JulieDjidji.github.io/fondations/chapter3/1-typessimples/</guid>
+      <description>Quelques exercices de manipulation Exercice 1 : afficher le type de x pour x=3, x=&amp;ldquo;test&amp;rdquo; et x=3.5
+ function myFunction1() { var x = document.getElementById(&#34;exercice1&#34;); if (x.style.display === &#34;none&#34;) { x.style.display = &#34;block&#34;; } else { x.style.display = &#34;none&#34;; } }  Voir résultat
+ x=3 type(x)  x=&#39;test&#39; type(x)  x=3.5 type(x)  
+Exercice 2 : Concaténer les chaînes de caractères suivantes &amp;ldquo;Les deux formateurs sont : &amp;ldquo;, &amp;ldquo;Julie&amp;rdquo;, &amp;ldquo; et &amp;ldquo;, &amp;ldquo;Laurent&amp;rdquo;</description>
+    </item>
+    
+    <item>
+      <title>Le premier objet python : les listes</title>
+      <link>https://JulieDjidji.github.io/fondations/chapter3/2-listes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://JulieDjidji.github.io/fondations/chapter3/2-listes/</guid>
+      <description>Une liste est une collection ordonnée d&amp;rsquo;élements qui peuvent être de types différents (combinaison possible de listes, de dictionnaires, d&amp;rsquo;éléments numériques et d&amp;rsquo;éléments caractères).
+Création et manipulation d&amp;rsquo;une liste    Action Fonction python     Création d&amp;rsquo;une liste [] ou list()   Test de la présence d&amp;rsquo;un élément dans une liste x in liste   Accès à un élément liste[i]   Accès à plusieurs éléments liste[i:j]   Minimum de la liste min(liste)   Maximum de la liste max(liste)   Nombre d&amp;rsquo;éléments d&amp;rsquo;une liste len(liste)   Nombre d’occurrence de l&amp;rsquo;élément x dans la liste liste.</description>
+    </item>
+    
+    <item>
+      <title>Les dictionnaires</title>
+      <link>https://JulieDjidji.github.io/fondations/chapter3/3-dictionnaires/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://JulieDjidji.github.io/fondations/chapter3/3-dictionnaires/</guid>
+      <description>Un dictionnaire est une liste qui à chaque clé associe une valeur. Il prend la forme suivante :
+{&#39;clé1&#39;: &#39;valeur1&#39;, &#39;clé2&#39;: &#39;valeur2&#39;} Voici les principales fonctions pour manipuler les dictionnaires :
+   Action Fonction python     Création d&amp;rsquo;un dictionnaire {}   Accès aux clés du dictionnaire d d.keys()   Accès aux valeurs du dictionnaire d d.values()   Accès à la valeur associée à la clé &amp;ldquo;clé1&amp;rdquo; d.</description>
+    </item>
+    
+    <item>
+      <title>Les sets</title>
+      <link>https://JulieDjidji.github.io/fondations/chapter3/4-sets/</link>
+      <pubDate>Wed, 02 Jan 2019 14:15:59 -0600</pubDate>
+      
+      <guid>https://JulieDjidji.github.io/fondations/chapter3/4-sets/</guid>
+      <description>Un ensemble (set) est une collection non ordonnée d&amp;rsquo;éléments uniques.
+Exercice 1 : Reprendre le dernier exemple créé dans la section sur les listes, créer et convertir cette liste en ensemble. Que constatez-vous ?
+ function myFunction1() { var x = document.getElementById(&#34;exercice1&#34;); if (x.style.display === &#34;none&#34;) { x.style.display = &#34;block&#34;; } else { x.style.display = &#34;none&#34;; } }  Voir résultat
+ set([i**2 for i in [1,2,3,4,5]]+[i**2 for i in [1,2,3,4,5]])  On constate que les éléments dupliqués sont supprimés.</description>
+    </item>
+    
+    <item>
+      <title>Les itérateurs et les générateurs</title>
+      <link>https://JulieDjidji.github.io/fondations/chapter3/5-generateurs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://JulieDjidji.github.io/fondations/chapter3/5-generateurs/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
