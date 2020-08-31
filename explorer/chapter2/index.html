@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Chapitre 2 : Visualiser les données - Python site</title>
+<meta name="generator" content="Hugo 0.74.3" />
+<link href="https://JulieDjidji.github.io/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="https://JulieDjidji.github.io/explorer/chapter2/">
+<link rel="stylesheet" href="https://JulieDjidji.github.io/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="https://JulieDjidji.github.io/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://JulieDjidji.github.io/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="https://JulieDjidji.github.io/js/jquery.backtothetop/jquery.backtothetop.min.js"></script></head>
+<body>
+<div class="container"><header>
+<h1>Python site</h1>
+<a href="https://github.com/PythonFormationLab" class="github"><i class="fab fa-github"></i></a>
+</header>
+<div class="menu">
+<nav>
+<ul>
+<li><a href="/about/">Références python</a></li></ul>
+</nav>
+</div>
+<div class="content-container">
+<main><h1>Chapitre 2 : Visualiser les données</h1><p>Ce tutoriel vise à explorer différents packages de visualisation sous python se différenciant notamment sur la niveau de facilité pour réaliser, personnaliser et formater les graphiques, sur la diversité des graphiques réalisables et sur le choix entre visualisation statique et visualisation interactive. Sans prétention d&rsquo;exhaustivité, notre exploration se retreint essentiellement à cinq librairies incontournables :</p>
+<ul>
+<li>la librairie historique de visualisation : <a href="#matplotlib"><strong>matplotlib</strong></a></li>
+<li>une surcouche de <em>matplotlib</em> : <a href="#seaborn"><strong>seaborn</strong></a></li>
+<li>une librairie avec une syntaxe proche de R : <a href="#plotnine"><strong>plotnine</strong></a></li>
+<li>un outil de visualisations interactives : <a href="#plotly"><strong>plotly</strong></a> (ou de façon alternative <a href="#cufflinks"><em>cufflinks</em></a>)</li>
+<li>une librairie de visualisations Web interactives : <a href="#bokeh"><strong>bokeh</strong></a></li>
+</ul>
+<p>Il pourrait aussi être intéressant de jeter un oeil à la libraire <a href="https://altair-viz.github.io/" target="_blank"><em>altair</em></a> qui semble proposer une très large palette de belles visualisations. Dans ce tutoriel, on n&rsquo;abordera ni les librairies <em>pydot</em> qui permet essentiellement la génération de graphes, ni la libraire <em>networkX</em> qui est très largement axée sur l&rsquo;analyse des graphes et des réseaux.</p>
+<p><strong>Quoi représenter ? Comment choisir le type de graphique adéquat ?</strong></p>
+<p align="center">
+<a href="https://raw.githubusercontent.com/ft-interactive/chart-doctor/master/visual-vocabulary/poster.png" target="_blank">
+<img src="../../images/visualVocabulary.jpg" alt="VisualVocabulary" width="1400" height="1200"/>
+</a>
+</p>
+<p>Afin d&rsquo;explorer ces différentes librairies, nous utiliserons un jeu de données restreints que vous allez contruire ! De plus, <em>a minima</em>, un graphique (dont un graphique commun représentant les 10 villes avec le patrimoine moyen le plus élevé parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF) sera réalisé avec chacune des librairies afin de faciliter leur comparaison.</p>
+<p><ins>Exercice 1</ins> : A partir des données Excel sur l&rsquo;impôt sur la fortune (<em>isfcom2017.xlsx</em>), construire deux <em>dataframes</em> : le premier <em>patrimoine_top</em> qui contient les 10 villes avec le patrimoine moyen le plus élevé et le second <em>impot_top</em> qui regroupe les 10 villes avec les redevables de l&rsquo;isf payant en moyenne le plus d&rsquo;impôt (parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF).</p>
+<script>
+function myFunction1() {
+    var x = document.getElementById("App1");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunction1()">Voir résultat</button></p>
+<div id="App1" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74">&#34;isfcom2017.xlsx&#34;</span>, sheet_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;définitif_patrimoine&#34;</span>, header<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+<span style="color:#66d9ef">print</span>(isf<span style="color:#f92672">.</span>shape)
+isf<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">2</span>)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># On fusionne avec la table commune pour récupérer le libellé des communes</span>
+<span style="color:#f92672">import</span> re
+communes<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;commune2019.csv&#34;</span>)
+isf[<span style="color:#e6db74">&#34;codeCommune&#34;</span>]<span style="color:#f92672">=</span>[re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39; &#39;</span>,<span style="color:#e6db74">&#39;&#39;</span>, str(x)) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> isf[<span style="color:#e6db74">&#34;Code commune (INSEE)&#34;</span>]]
+isf<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>merge(communes, isf, left_on<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;com&#34;</span>, right_on<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;codeCommune&#34;</span>, how<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;inner&#39;</span>)
+isf<span style="color:#f92672">=</span>isf[isf<span style="color:#f92672">.</span>typecom<span style="color:#f92672">!=</span><span style="color:#e6db74">&#39;COMD&#39;</span>]
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">patrimoine_top<span style="color:#f92672">=</span>isf<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>, ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">10</span>)
+impot_top<span style="color:#f92672">=</span>isf<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;impôt moyen en €&#39;</span>, ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">10</span>)
+</code></pre></div></div>
+<h2 id="matplotlib">La librairie historique de visualisation : <a href="https://matplotlib.org/index.html" target="_blank"><b>matplotlib</b></a></h2>
+<p>Quelques mots sur la syntaxe :</p>
+<ul>
+<li>Chargement de la librarie : <em>import matplotlib.pyplot as plt</em></li>
+<li>Création d&rsquo;une figure vide en fixant des paramètres comme la taille de l&rsquo;image <em>fig = plt.figure(figsize=(10,4))</em> <em>[Etape optionnelle]</em></li>
+<li>Alternative pour diviser la fenêtre graphique en sous-fenêtres avec deux graphiques l&rsquo;un en dessous de l&rsquo;autre : <em>f, (ax1, ax2) = plt.subplots(nrows=2,ncols=1, figsize=(15, 10))</em> <em>[Etape optionnelle]</em></li>
+<li>Tracé du graphique avec la commande <em>plt.nomGraphique</em> (par exemple, <em>plt.plot</em> pour un tracé linéaire, <em>plt.scatter</em> pour nuage de points, <em>plt.bar</em> pour un graphique à barres &hellip;)</li>
+<li>Ajout de paramètres (titres aevc *plt.<em>title</em> ou <em>ax.set_title</em>, label de l&rsquo;axe des abscisses <em>plt.xlabel</em> ou <em>ax.set_xlabel</em>, &hellip;) <em>[Etape optionnelle]</em></li>
+</ul>
+<p>Pour réaliser un graphique, référez-vous à la <a href="https://matplotlib.org/index.html" target="_blank">documentation officielle</a>. Le <a href="http://www.python-simple.com/python-matplotlib/matplotlib-intro.php" target="_blank">site</a> détaille aussi la syntaxe et les options pour réaliser de nombreux types de graphiques avec <em>matplotlib</em>. Si vous avez besoin d&rsquo;un aide mémoire, consultez le <a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Python_Matplotlib_Cheat_Sheet.pdf" target="_blank">cheat sheet</a> !</p>
+<p><ins>Exercice 1</ins> : Tracer le diagramme à barres horizontales représentant les 10 villes avec le patrimoine moyen le plus élevé parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionMatplotlib1() {
+    var x = document.getElementById("AppMatplotlib1");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionMatplotlib1()">Voir résultat</button></p>
+<div id="AppMatplotlib1" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">4</span>))
+plt<span style="color:#f92672">.</span>barh(patrimoine_top[<span style="color:#e6db74">&#39;libelle&#39;</span>], patrimoine_top[<span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>], align<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;center&#39;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>, height<span style="color:#f92672">=</span><span style="color:#ae81ff">0.7</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Quelles communes abritent les plus hauts patrimoines ?&#39;</span>)
+</code></pre></div></div>
+<p><ins>Exercice 2</ins> : Tracer les deux diagrammes à barres horizontales représentant respectivement les 10 villes avec le patrimoine moyen le plus élevé et les 10 villes avec les redevables de l&rsquo;isf payant en moyenne le plus d&rsquo;impôt parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionMatplotlib2() {
+    var x = document.getElementById("AppMatplotlib2");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionMatplotlib2()">Voir résultat</button></p>
+<div id="AppMatplotlib2" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">f, (ax1, ax2) <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(nrows<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,ncols<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">15</span>, <span style="color:#ae81ff">10</span>))
+ax1<span style="color:#f92672">.</span>barh(patrimoine_top[<span style="color:#e6db74">&#39;libelle&#39;</span>], patrimoine_top[<span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>], align<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;center&#39;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>,height<span style="color:#f92672">=</span><span style="color:#ae81ff">0.7</span>)
+ax1<span style="color:#f92672">.</span>set_xlabel(<span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>)
+ax1<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#39;Quelles communes abritent les plus hauts patrimoines ?&#39;</span>)
+
+ax2<span style="color:#f92672">.</span>barh(impot_top[<span style="color:#e6db74">&#39;libelle&#39;</span>], impot_top[<span style="color:#e6db74">&#39;impôt moyen en €&#39;</span>], align<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;center&#39;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;magenta&#39;</span>,height<span style="color:#f92672">=</span><span style="color:#ae81ff">0.7</span>)
+ax2<span style="color:#f92672">.</span>set_xlabel(<span style="color:#e6db74">&#39;impôt moyen en €&#39;</span>)
+ax2<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#34;Quelles communes abitrent les redevables de l&#39;isf payant le plus d&#39;impôt en moyenne ?&#34;</span>)
+</code></pre></div></div>
+<p>Votre graphe ne s&rsquo;affiche pas dans votre <em>notebook</em> mais aucune erreur ne se produit ? Assurez-vous que la ligne de code suivante est bien ajoutée dans votre <em>notebook</em> :</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">%</span>matplotlib inline
+</code></pre></div><p>Toutefois, pour avoir un environnement interactif, il peut être préférable d&rsquo;utiliser la commande suivante :</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">%</span>matplotlib notebook
+</code></pre></div><p>Il est possible de directement réaliser des graphes à partir d&rsquo;un <em>dataframe pandas</em>. Pour cela, on peut s&rsquo;appuyer sur la <a href="http://pandas.pydata.org/pandas-docs/stable/user_guide/visualization.html" target="_blank">documentation de pandas</a>.</p>
+<p><ins>Exercice </ins> : Directement à partir du <em>dataframe</em> * patrimoine_top*, tracer le diagramme à barres horizontales représentant les 10 villes avec le patrimoine moyen le plus élevé parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionGraphePandas1() {
+    var x = document.getElementById("AppGraphePandas1");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionGraphePandas1()">Voir résultat</button></p>
+<div id="AppGraphePandas1" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">patrimoine_top<span style="color:#f92672">.</span>plot(kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;barh&#39;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>, x<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Commune&#39;</span>, figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">5</span>), facecolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;magenta&#34;</span>, 
+                    legend<span style="color:#f92672">=</span>False, title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Quelles communes abritent les plus hauts patrimoines ?&#39;</span>, subplots<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</code></pre></div></div>
+<h2 id="seaborn">Une surcouche de *matplotlib* : <a href="http://seaborn.pydata.org/" target="_blank"><b>seaborn</b></a></h2>
+<p>Une <a href="http://seaborn.pydata.org/" target="_blank">documentation officielle</a> peut, comme pour <em>matplotlib</em>, être complétée par le <a href="http://www.python-simple.com/python-seaborn/seaborn-general.php" target="_blank">site</a>. Comme pour <em>matplotlib</em>, n&rsquo;hésitez pas à consulter le <a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Python_Seaborn_Cheat_Sheet.pdf" target="_blank">cheat sheet</a> de Seaborn.</p>
+<ul>
+<li>
+<p>Les plus de Seaborn</p>
+<ul>
+<li>Faciliter la visualisation</li>
+<li>Rendre la visualisation plus attrayante avec notamment une <a href="https://seaborn.pydata.org/tutorial/color_palettes.html" target="_blank">palette de couleur spécifique</a></li>
+</ul>
+</li>
+<li>
+<p>Un inconvénient principal : Un nombre plus restreint de visualisations possibles dont les principales sont :</p>
+</li>
+</ul>
+<table border="1px">
+	<tr>
+        <TH>
+        <TH>Fonction
+        <TH>Résultat
+    <tr>
+        <TD rowspan="2">Analyse des variables quantitatives
+        <TD> sns.scatterplot() ou sns.replot(kind="scatter")
+        <TD> Tracé du nuage de points
+    <tr>
+        <TD> sns.lineplot() ou sns.replot(kind="line")
+        <TD> Tracé linéaire entre les points
+    <tr>
+        <TD rowspan="4">Analyse des variables catégorielles
+        <TD> sns.boxplot()
+        <TD> Représentation d'un diagramme en boîte mettant en exergue les quantiles de la distribution et les points extrêmes
+    <tr>
+        <TD> sns.violinplot()
+        <TD> Représentation de la courbe de densité de probabilité des différentes valeurs et de la distribution des données
+    <tr>
+        <TD> sns.barplot()
+        <TD> Graphique à barres de longueur proportionnelle à la valeur représentée
+    <tr>
+        <TD> sns.countplot()
+        <TD> Graphique représentant le nombre d'observations associées à une variable donnée
+    <tr>
+        <TD> Analyse de la distribution des données
+        <TD> sns.distplot()
+        <TD> Distribution / histogramme avec ou sans représentation de la densité estimée (Kernel Density Estmation - KDE)
+</table>
+<p><ins>Exercice 1</ins> : A partir de <em>seaborn</em>, tracer le diagramme à barres horizontales représentant les 10 villes avec le patrimoine moyen le plus élevé parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionSeaborn1() {
+    var x = document.getElementById("AppSeaborn1");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionSeaborn1()">Voir résultat</button></p>
+<div id="AppSeaborn1" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns
+fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">4</span>))
+sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;whitegrid&#34;</span>)
+bar_plot <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>barplot(y<span style="color:#f92672">=</span>patrimoine_top[<span style="color:#e6db74">&#34;Commune&#34;</span>],x<span style="color:#f92672">=</span>patrimoine_top[<span style="color:#e6db74">&#34;patrimoine moyen en €&#34;</span>], 
+                       palette<span style="color:#f92672">=</span>sns<span style="color:#f92672">.</span>color_palette(<span style="color:#e6db74">&#34;Blues_d&#34;</span>), errwidth <span style="color:#f92672">=</span>False)
+plt<span style="color:#f92672">.</span>xticks(rotation<span style="color:#f92672">=</span><span style="color:#ae81ff">90</span>)
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div></div>
+<p><ins>Exercice 2</ins> : A partir de la table <em>isf</em>, tracé le diagramme à barres verticales représentant les nombre de communes parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionSeaborn2() {
+    var x = document.getElementById("AppSeaborn2");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionSeaborn2()">Voir résultat</button></p>
+<div id="AppSeaborn2" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">4</span>))
+sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;whitegrid&#34;</span>)
+sns<span style="color:#f92672">.</span>countplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Région&#34;</span>, data<span style="color:#f92672">=</span>isf)
+plt<span style="color:#f92672">.</span>xticks(rotation<span style="color:#f92672">=</span><span style="color:#ae81ff">90</span>)
+</code></pre></div></div>
+<p><ins>Exercice 3</ins> : A partir de la table <em>isf</em>,  représenter l&rsquo;impôt moyen selon le patrimoine moyen (pour les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF).</p>
+<script>
+function myFunctionSeaborn3() {
+    var x = document.getElementById("AppSeaborn3");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionSeaborn3()">Voir résultat</button></p>
+<div id="AppSeaborn3" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">5</span>))
+sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;white&#34;</span>)
+sns<span style="color:#f92672">.</span>scatterplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;patrimoine moyen en €&#34;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;impôt moyen en €&#39;</span>, data<span style="color:#f92672">=</span>isf)
+</code></pre></div></div>
+<h2 id="plotnine">Une librairie avec une syntaxe proche de R : <a href="https://plotnine.readthedocs.io/en/stable/" target="_blank"><b>plotnine</b></a></h2>
+<p>Si la librairie <a href="http://ggplot.yhathq.com/" target="_blank"><em>ggplot</em></a> propose dès 2014 une version partielle de <em>ggplot</em> sous python avec l&rsquo;ambition de respecter le concept de <em>Grammar of Graphics</em>, cette librairie n&rsquo;est toutefois plus maintenue depuis 2016. Son installation pose d&rsquo;ailleurs des problèmes de compatibilité avec la version actuelle de <em>pandas</em>. La librairie <em>plotnine</em>, toujours en cours de développement, constitue une alternative intéressante pour les aficionados de R souhaitant utiliser python !</p>
+<p>IL n&rsquo;est pas forcément utile de réaliser un grand nombre d&rsquo;exemples notamment en raison de sa grande similarité avec la syntaxe de R, testons la simplement en réalisant le même diagramme que pour les autre librairies.</p>
+<p><ins>Exercice </ins> : A partir de <em>plotnine</em>, tracer le diagramme à barres horizontales représentant les 10 villes avec le patrimoine moyen le plus élevé parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionPlotnine1() {
+    var x = document.getElementById("AppPlotnine1");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPlotnine1()">Voir résultat</button></p>
+<div id="AppPlotnine1" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#960050;background-color:#1e0010">!</span>pip install plotnine
+<span style="color:#f92672">import</span> plotnine
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Pour ordonner les labels par ordre croissant de patrimoine moyen</span>
+commune_cat<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>api<span style="color:#f92672">.</span>types<span style="color:#f92672">.</span>CategoricalDtype(patrimoine_top<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>tolist(), ordered<span style="color:#f92672">=</span>True)
+patrimoine_top[<span style="color:#e6db74">&#39;commune_cat&#39;</span>] <span style="color:#f92672">=</span> patrimoine_top[<span style="color:#e6db74">&#39;libelle&#39;</span>]<span style="color:#f92672">.</span>astype(str)<span style="color:#f92672">.</span>astype(commune_cat)
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">p  <span style="color:#f92672">=</span>  plotnine<span style="color:#f92672">.</span>ggplot(patrimoine_top ,  aes( x <span style="color:#f92672">=</span> patrimoine_top[<span style="color:#e6db74">&#34;commune_cat&#34;</span>], y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;patrimoine moyen en €&#34;</span>))  <span style="color:#f92672">+</span> \
+     geom_bar(stat<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;identity&#39;</span>, fill<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;magenta&#39;</span>) <span style="color:#f92672">+</span> \
+     ggtitle(<span style="color:#e6db74">&#34;Quelles communes abritent les plus hauts patrimoines ?&#34;</span> ) <span style="color:#f92672">+</span> \
+     ylab(<span style="color:#e6db74">&#34;patrimoine moyen en €&#34;</span> )  <span style="color:#f92672">+</span>   \
+     xlab(<span style="color:#e6db74">&#34;Commune&#34;</span>) <span style="color:#f92672">+</span> \
+    coord_flip() <span style="color:#f92672">+</span> \
+     theme(axis_text_x <span style="color:#f92672">=</span> element_text( angle <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> ))   <span style="color:#f92672">+</span> \
+     theme(panel_background<span style="color:#f92672">=</span>element_rect(fill<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;white&#39;</span>),
+         axis_line_x<span style="color:#f92672">=</span>element_line(color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>),
+          axis_line_y<span style="color:#f92672">=</span>element_line(color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;black&#39;</span>))
+<span style="color:#66d9ef">print</span>(p)
+</code></pre></div></div>
+<h2 id="plotly">Un outil de visualisations interactives : <a href="https://plot.ly/python/user-guide/" target="_blank"><b>plotly</b></a></h2>
+<p>Comme pour les autres librairies, la <a href="https://plot.ly/python/reference/" target="_blank">documentation officielle</a> de <em>plotly</em> est riche : elle présente la syntaxe relative à chaque fonction, notamment à travers une large palette d&rsquo;exemples. Pour la syntaxe globale, n&rsquo;hésitez pas aussi à consulter le <a href="https://images.plot.ly/plotly-documentation/images/python_cheat_sheet.pdf" target="_blank">cheat sheet</a> !</p>
+<ul>
+<li>
+<p>Les plus de <em>plotly</em> :</p>
+<ul>
+<li>Création de visualisations interactives construites à l&rsquo;aide de D3.js (sans même connaître D3.js !)</li>
+<li>En dehors de python, <em>plotly</em> peut être utilisé sans connaissances techniques pour créer des tracés interactifs, via l&rsquo;interface graphique de plotly</li>
+<li>Visualisations partageables en ligne avec plusieurs personnes</li>
+<li>Intégration possible des graphiques interactifs dans des projets ou des sites Web</li>
+</ul>
+</li>
+<li>
+<p>L&rsquo;inconvénient principal :</p>
+<ul>
+<li>L&rsquo;utilisation de l&rsquo;interface graphique de plotly oblige l&rsquo;utilisateur à rendre ses données publiques qui sont alors consultables par tous.</li>
+</ul>
+</li>
+</ul>
+<p>Comme l&rsquo;indique la <a href="https://plot.ly/python/getting-started/#start-plotting-online" target="_blank">documentation</a>, <em>plotly</em> permet aussi de créer hors ligne :</p>
+<ul>
+<li>avec <em>plotly.offline.plot()</em> pour créer et sauvegarder le graphique en html et l&rsquo;afficher dans le navigateur</li>
+<li>avec <em>plotly.offline.iplot()</em> pour créer et afficher le graphique au sein d&rsquo;un <em>jupyter notebook</em></li>
+</ul>
+<p><ins>Exercice 1</ins> : A partir de <em>plotly</em>, tracer le diagramme à barres horizontales représentant les 10 villes avec le patrimoine moyen le plus élevé parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionPlotly1() {
+    var x = document.getElementById("AppPlotly1");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPlotly1()">Voir résultat</button></p>
+<div id="AppPlotly1" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> plotly.graph_objs <span style="color:#f92672">as</span> go
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Ensemble des données pour la visualisation</span>
+data <span style="color:#f92672">=</span> [
+    go<span style="color:#f92672">.</span>Bar(x<span style="color:#f92672">=</span>patrimoine_top[<span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>],
+                    y<span style="color:#f92672">=</span>patrimoine_top[<span style="color:#e6db74">&#39;Commune&#39;</span>], orientation <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;h&#39;</span>, 
+                   marker<span style="color:#f92672">=</span>dict(color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;magenta&#39;</span>))
+]
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Apparence du graphique </span>
+layout <span style="color:#f92672">=</span> go<span style="color:#f92672">.</span>Layout(
+    title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Quelles communes abritent les plus hauts patrimoines ?&#39;</span>,
+    font<span style="color:#f92672">=</span>go<span style="color:#f92672">.</span>layout<span style="color:#f92672">.</span>Font(
+        family<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Arial&#39;</span>, size<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>
+    ),
+    showlegend<span style="color:#f92672">=</span>False,
+    xaxis<span style="color:#f92672">=</span>dict(
+        showgrid<span style="color:#f92672">=</span>True,
+        showline<span style="color:#f92672">=</span>True,
+        showticklabels<span style="color:#f92672">=</span>True,
+        zeroline<span style="color:#f92672">=</span>True,
+        exponentformat<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;none&#39;</span>
+    ),
+    yaxis<span style="color:#f92672">=</span>dict(
+        automargin<span style="color:#f92672">=</span> True
+    ),
+    bargap<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>
+)
+
+fig <span style="color:#f92672">=</span> go<span style="color:#f92672">.</span>Figure(data<span style="color:#f92672">=</span>data, layout<span style="color:#f92672">=</span>layout)
+plotly<span style="color:#f92672">.</span>offline<span style="color:#f92672">.</span>iplot(fig) <span style="color:#75715e"># Option filename si on souhaite sauvegarder la figure</span>
+</code></pre></div></div>
+<p id="cufflinks">
+Pour combiner de façon efficiente, il est possible d'utiliser la librairie **cufflinks** qui facilite la réalisation de graphiques avec *plotly* à partir de *dataframes pandas*. Quelques tutoriels sont disponibles sur leur <a href="https://github.com/santosjorge/cufflinks" target="_blank">github</a> ou sur le <a href="https://plot.ly/ipython-notebooks/cufflinks/" target="_blank">site</a> de plotly.
+</p>
+<p><ins>Exercice 2</ins> : A partir de <em>cufflinks</em>, tracer le diagramme à barres horizontales représentant les 10 villes avec le patrimoine moyen le plus élevé parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionPlotly2() {
+    var x = document.getElementById("AppPlotly2");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPlotly2()">Voir résultat</button></p>
+<div id="AppPlotly2" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> cufflinks <span style="color:#f92672">as</span> cf
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Pour permettre un affichage au sein du notebook</span>
+cf<span style="color:#f92672">.</span>go_offline()
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">patrimoine_top[[<span style="color:#e6db74">&#39;libelle&#39;</span>,<span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>]]<span style="color:#f92672">.</span>iplot(kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;bar&#39;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>, x<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;libelle&#39;</span>,
+                                                          xTitle<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>, yTitle<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Commune&#39;</span>, 
+                                                          barmode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;group&#39;</span>, orientation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;h&#39;</span>,
+                                                          title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Quelles communes abritent les plus hauts patrimoines ?&#39;</span>,
+                                                         colors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;magenta&#39;</span>, bargap<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>, margin<span style="color:#f92672">=</span>(<span style="color:#ae81ff">200</span>,<span style="color:#ae81ff">50</span>,<span style="color:#ae81ff">50</span>,<span style="color:#ae81ff">50</span>))
+</code></pre></div></div>
+<p><ins>Exercice 3</ins> : Comment contrôler l&rsquo;apparence du graphique (par exemple la taille de la figure) si les paramètres n&rsquo;existent pas dans la fonction <em>iplot</em> de <em>cufflinks</em> ? Tracer le diagramme précédent en fixant la taille de la figure.</p>
+<script>
+function myFunctionPlotly3() {
+    var x = document.getElementById("AppPlotly3");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPlotly3()">Voir résultat</button></p>
+<div id="AppPlotly3" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> cufflinks <span style="color:#f92672">as</span> cf
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Pour permettre un affichage au sein du notebook</span>
+cf<span style="color:#f92672">.</span>go_offline()
+</code></pre></div><p>Afin de modifier plus finement l&rsquo;apparence du graphique, il est possible d&rsquo;ajouter ces caractéristiques de mise en forme en paramètre de <em>layout</em>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">layout_cufflinks <span style="color:#f92672">=</span> cf<span style="color:#f92672">.</span>Layout(
+    height<span style="color:#f92672">=</span><span style="color:#ae81ff">500</span>,
+    width<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>,
+    title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Quelles communes abritent les plus hauts patrimoines ?&#39;</span>,
+    font<span style="color:#f92672">=</span>cf<span style="color:#f92672">.</span>layout<span style="color:#f92672">.</span>Font(
+        family<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Arial&#39;</span>, size<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>
+    ),
+    showlegend<span style="color:#f92672">=</span>False,
+    xaxis<span style="color:#f92672">=</span>dict(
+        showgrid<span style="color:#f92672">=</span>True,
+        showline<span style="color:#f92672">=</span>True,
+        showticklabels<span style="color:#f92672">=</span>True,
+        zeroline<span style="color:#f92672">=</span>True,
+        exponentformat<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;none&#39;</span>
+    ),
+    yaxis<span style="color:#f92672">=</span>dict(
+        automargin<span style="color:#f92672">=</span> True
+    ),
+    bargap<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>
+)
+patrimoine_top[[<span style="color:#e6db74">&#39;libelle&#39;</span>,<span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>]]<span style="color:#f92672">.</span>iplot(kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;bar&#39;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>, x<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;libelle&#39;</span>,
+                                                          xTitle<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>, yTitle<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Commune&#39;</span>, 
+                                                          barmode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;group&#39;</span>, orientation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;h&#39;</span>,
+                                                          title<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Quelles communes abritent les plus hauts patrimoines ?&#39;</span>,
+                                                         colors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;magenta&#39;</span>, bargap<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>, margin<span style="color:#f92672">=</span>(<span style="color:#ae81ff">800</span>,<span style="color:#ae81ff">50</span>,<span style="color:#ae81ff">50</span>,<span style="color:#ae81ff">50</span>), 
+                                                         layout<span style="color:#f92672">=</span>layout_cufflinks<span style="color:#f92672">.</span>to_plotly_json())
+</code></pre></div></div>
+<h2 id="bokeh">Une librairie de visualisations Web interactives : <a href="https://bokeh.pydata.org/en/latest/" target="_blank"><b>bokeh</b></a></h2>
+<p>Difficile de présenter <em>plotly</em> et d&rsquo;ignorer complètement <em>bokeh</em> ! Pour faciliter la prise en main de <em>bokeh</em>, vous pouvez consulter la <a href="https://bokeh.pydata.org/en/latest/" target="_blank">documentation officielle</a> ou le <a href="https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Python_Bokeh_Cheat_Sheet.pdf" target="_blank">cheat sheet</a>. <em>Bokeh</em> présente toutefois quelques défauts indéniables :</p>
+<ul>
+<li>Moins d&rsquo;exemples en ligne et documentation parfois insuffisante (essentiellement basée sur des exemples)</li>
+<li>Moins intégré avec <em>pandas</em> que <em>plotly</em> (<em>bokeh</em> s’intègre aux Pandas à l’aide de la <em>ColumnDataSourceclasse</em>, cette fonction est présente dans le module <em>bokeh.models</em>)</li>
+</ul>
+<p><ins>Exercice </ins> : A partir de <em>bokeh</em>, tracer le diagramme à barres horizontales représentant les 10 villes avec le patrimoine moyen le plus élevé parmi les villes de plus de 20 000 habitants ayant plus de 50 redevables à l&rsquo;ISF.</p>
+<script>
+function myFunctionBokeh1() {
+    var x = document.getElementById("AppBokeh1");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionBokeh1()">Voir résultat</button></p>
+<div id="AppBokeh1" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> bokeh.plotting <span style="color:#f92672">import</span> figure, show
+<span style="color:#f92672">from</span> bokeh.io <span style="color:#f92672">import</span> output_notebook
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">output_notebook()
+p <span style="color:#f92672">=</span> figure(plot_width<span style="color:#f92672">=</span><span style="color:#ae81ff">800</span>, plot_height<span style="color:#f92672">=</span><span style="color:#ae81ff">400</span>, y_range<span style="color:#f92672">=</span>patrimoine_top[<span style="color:#e6db74">&#39;libelle&#39;</span>]<span style="color:#f92672">.</span>tolist(),
+          title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Quelles communes abritent les plus hauts patrimoines ?&#34;</span>,)
+p<span style="color:#f92672">.</span>hbar(y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;libelle&#39;</span>, right<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>, height<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.7</span>, source<span style="color:#f92672">=</span>source, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;magenta&#34;</span>)
+show(p)
+</code></pre></div></div>
+<div class="edit-meta">Last updated on 18 Mar 2019 / Published on 18 Mar 2019<br><a href="https://github.com/thingsym/hugo-theme-techdoc/edit/master/content/Explorer/chapter2/_index.md" class="edit-page"><i class="fas fa-pen-square"></i> Edit on GitHub</a></div><nav class="pagination"><a class="nav nav-prev" href="/explorer/chapter1/" title="Chapitre 1 : Manipuler les données"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Chapitre 1 : Manipuler les données</a>
+<a class="nav nav-next" href="/explorer/chapter3/" title="Chapitre 3 : Manipuler et visualiser des données géographiques">Next - Chapitre 3 : Manipuler et visualiser des données géographiques <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="https://JulieDjidji.github.io/">Home</a></li>
+
+<li class=""><a href="/getting-started/">Préparer le terrain : installer python</a>
+<ul class="">
+</ul>
+  
+</li>
+
+<li class=""><a href="/fondations/">Poser les fondations</a>
+<ul class="">
+
+<li class=""><a href="/fondations/chapter1/">Chapitre 1 : La syntaxe</a>
+<ul class="">
+</ul>
+  
+</li>
+
+<li class=""><a href="/fondations/chapter2/">Chapitre 2 : Quels objets en python ?</a>
+<ul class="">
+</ul>
+  
+</li>
+
+<li class=""><a href="/fondations/chapter3/">Chapitre 3 : Lecture, écriture et fermeture des fichiers</a>
+</li>
+
+<li class=""><a href="/fondations/chapter4/">Chapitre 4 : Les packages en python</a>
+</li>
+</ul>
+  
+</li>
+
+<li class="parent"><a href="/explorer/">Explorer les données</a>
+<ul class="sub-menu">
+
+<li class=""><a href="/explorer/chapter1/">Chapitre 1 : Manipuler les données</a>
+</li>
+
+<li class="parent active"><a href="/explorer/chapter2/">Chapitre 2 : Visualiser les données</a>
+</li>
+
+<li class=""><a href="/explorer/chapter3/">Chapitre 3 : Manipuler et visualiser des données géographiques</a>
+</li>
+
+<li class=""><a href="/explorer/chapter4/">Chapitre 4 : Modéliser</a>
+</li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/project/">Réaliser un mini projet</a>
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

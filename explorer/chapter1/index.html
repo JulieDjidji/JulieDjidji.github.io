@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Chapitre 1 : Manipuler les données - Python site</title>
+<meta name="generator" content="Hugo 0.74.3" />
+<link href="https://JulieDjidji.github.io/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="https://JulieDjidji.github.io/explorer/chapter1/">
+<link rel="stylesheet" href="https://JulieDjidji.github.io/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="https://JulieDjidji.github.io/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://JulieDjidji.github.io/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="https://JulieDjidji.github.io/js/jquery.backtothetop/jquery.backtothetop.min.js"></script></head>
+<body>
+<div class="container"><header>
+<h1>Python site</h1>
+<a href="https://github.com/PythonFormationLab" class="github"><i class="fab fa-github"></i></a>
+</header>
+<div class="menu">
+<nav>
+<ul>
+<li><a href="/about/">Références python</a></li></ul>
+</nav>
+</div>
+<div class="content-container">
+<main><h1>Chapitre 1 : Manipuler les données</h1><p><a href="#numpy"><strong>Numpy</strong></a> : bibliothèque python de bas niveau utilisée pour le calcul scientifique :</p>
+<ul>
+<li>Permet notamment de travailler avec des tableaux et matrices multidimensionnels et volumineux homogènes (c&rsquo;est-à-dire de même type).</li>
+<li>Dont l&rsquo;objet principal est le ndarray (un type de tableau à N dimensions)</li>
+</ul>
+<p><a href="#pandas"><strong>Pandas</strong></a> : package de manipulation de données pour manipuler des données de haut niveau construits sur <em>numpy</em></p>
+<ul>
+<li>La série est le principal élément constitutif des pandas. Une série est un tableau unidimensionnel basé sur <em>numpy ndarray</em>. Dans un <em>dataframe</em>, une série correspond à une colonne.</li>
+<li>Un <em>dataframe</em> est un tableau de données étiquetée en 2 dimensions dont les colonnes sont constituées par un <em>ndarray</em>, une série ou un autre <em>dataframe</em>.</li>
+</ul>
+<h2 id="numpy"><b>Numpy</b></h2>
+<p><em>Numpy</em> est le package incontournable pour effectuer du calcul scientifique en python, en facilitant notamment la gestion des tableaux et des matrices de grande dimension. La documentation officielle est disponible via ce <a href="https://docs.scipy.org/doc/numpy/user/quickstart.html" target="_blank">lien</a>.</p>
+<p><em>Numpy</em> permet de <strong>manipuler des arrays</strong> ou des matrices, pouvant être par exemple construites à partir d&rsquo;arrays. Un <em>array</em> correspond à un tableau de <strong>valeurs du même type</strong>. Les opérations mathématiques sont facilitées par un ensemble de fonctions accessibles dans le package <em>numpy</em>. Le <a href="http://www.python-simple.com/python-numpy-scipy/creation-numpy.php" target="_blank">site</a> offre un large panorama des fonctionnalités de <em>numpy</em>.</p>
+<p><ins>NB</ins> : L&rsquo;<em>alias</em> np est très souvent utilisé pour désigner <em>numpy</em></p>
+<p><ins> Petit rappel</ins> : en python, les indices commencent à zéro. Le premier élément de l&rsquo;<em>array</em> s&rsquo;obtient donc avec la commande <em>a[0]</em></p>
+<p><ins><strong>App 1</strong></ins> : Charger <em>numpy</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+</code></pre></div><p><ins><strong>App 2</strong></ins> : Créer un array constitué que de 1 et un autre que de 0</p>
+<script>
+function myFunctionNumpyApp2() {
+    var x = document.getElementById("NumpyApp2");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionNumpyApp2()">Voir résultat</button></p>
+<div id="NumpyApp2" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">np<span style="color:#f92672">.</span>ones(<span style="color:#ae81ff">10</span>)
+np<span style="color:#f92672">.</span>zeros(<span style="color:#ae81ff">10</span>)
+</code></pre></div></div>
+<p><ins><strong>App 3</strong></ins> : Créer un array avec des éléments parcourant 0 à 10 inclus de 2 en 2</p>
+<script>
+function myFunctionNumpyApp3() {
+    var x = document.getElementById("NumpyApp3");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionNumpyApp3()">Voir résultat</button></p>
+<div id="NumpyApp3" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">11</span>,<span style="color:#ae81ff">2</span>)
+</code></pre></div></div>
+<p><ins><strong>App 4</strong></ins> : Concaténer l&rsquo;<em>array</em> précédent avec un array contenant les entiers de 0 à 5 inclus</p>
+<script>
+function myFunctionNumpyApp4() {
+    var x = document.getElementById("NumpyApp4");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionNumpyApp4()">Voir résultat</button></p>
+<div id="NumpyApp4" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Solution 1</span>
+np<span style="color:#f92672">.</span>concatenate([np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">11</span>,<span style="color:#ae81ff">2</span>),np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>)])
+
+<span style="color:#75715e"># Solution 2</span>
+np<span style="color:#f92672">.</span>hstack([np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">11</span>,<span style="color:#ae81ff">2</span>),np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>)])
+</code></pre></div></div>
+<p><ins><strong>App 5</strong></ins> : Concaténer verticalement (pour former un array de listes) l&rsquo;<em>array</em> précédent avec un array contenant les entiers de 0 à 5 inclus</p>
+<script>
+function myFunctionNumpyApp5() {
+    var x = document.getElementById("NumpyApp5");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionNumpyApp5()">Voir résultat</button></p>
+<div id="NumpyApp5" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Solution 1</span>
+np<span style="color:#f92672">.</span>vstack([np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">11</span>,<span style="color:#ae81ff">2</span>),np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>)])
+
+<span style="color:#75715e"># Solution 2 : si la concaténation horizontale des deux arrays est déjà affectée à una variable, il peut être intéressant de simplement la reformater</span>
+x<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>hstack([np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">11</span>,<span style="color:#ae81ff">2</span>),np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>)])
+x<span style="color:#f92672">.</span>reshape(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">6</span>)
+</code></pre></div></div>
+<p><ins><strong>App 6</strong></ins> : Vérifier que tous les éléments de l&rsquo;array contenant les entiers de 0 à 5 inclus sont inférieurs à 10</p>
+<script>
+function myFunctionNumpyApp6() {
+    var x = document.getElementById("NumpyApp6");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionNumpyApp6()">Voir résultat</button></p>
+<div id="NumpyApp6" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">np<span style="color:#f92672">.</span>all(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>)<span style="color:#f92672">&lt;</span><span style="color:#ae81ff">10</span>)
+</code></pre></div></div>
+<p><ins><strong>App 7</strong></ins> : Vérifier que l&rsquo;un des éléments de l&rsquo;array contenant les entiers de 0 à 5 inclus est supérieur strictement à 4</p>
+<script>
+function myFunctionNumpyApp7() {
+    var x = document.getElementById("NumpyApp7");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionNumpyApp7()">Voir résultat</button></p>
+<div id="NumpyApp7" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">np<span style="color:#f92672">.</span>any(np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">6</span>)<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">4</span>)
+</code></pre></div></div>
+<h2 id="pandas"><b>Pandas</b></h2>
+<p>Le package <em>pandas</em> fournit de nombreux outils pour faciliter la manipulation des données. <em>Pandas</em> permet notamment de :</p>
+<ul>
+<li>importer et exporter des données depuis divers formats (<em>csv</em>, <em>Excel</em>, **, <em>HTML</em>, <em>json</em>, <em>parquet</em> &hellip;)</li>
+<li>définir des <em>dataframes</em> cad des tableaux de données variables (colonnes) x individus (lignes)</li>
+<li>manipuler des <em>dataframes</em> (gestion des valeurs manquantes, création de variables, filtre selon les variables ou les individus, fusion de différents <em>dataframes</em>)</li>
+<li>effectuer des statistiques descriptives (comptage et agrégation de données par groupe)</li>
+<li>tracer directement des graphes grâce à l&rsquo;intégration dans <em>pandas</em> d&rsquo;objets <em>matplotlib</em></li>
+</ul>
+<p>La documentation officielle est disponible via ce <a href="http://pandas.pydata.org/pandas-docs/stable/user_guide/index.html" target="_blank">lien</a>. Le <a href="http://www.python-simple.com/python-pandas/panda-intro.php" target="_blank">site</a> fournit aussi un large éventail d&rsquo;exemples.</p>
+<p><ins><strong>App 1</strong></ins> : Charger <em>pandas</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+</code></pre></div><p><ins><strong>App 2</strong></ins> : Lire les données de population du fichier Excel <em>base-pop-historiques-1876-2015.xls</em> et afficher les 4 premières lignes</p>
+<script>
+function myFunctionPandasApp2() {
+    var x = document.getElementById("PandasApp2");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp2()">Voir résultat</button></p>
+<div id="PandasApp2" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pop<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74">&#34;base-pop-historiques-1876-2015.xls&#34;</span>, sheet_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;pop_1876_2015&#34;</span>, header<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+pop<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">4</span>)
+</code></pre></div></div>
+<p>NB : Même s&rsquo;il reste préférable d&rsquo;opter pour un autre format que celui de <em>SAS</em>, <em>pandas</em> offre toutefois la possibilité de gérer le format <em>sas7bdat</em> avec la fonction <em>read_sas</em>.  Voici un exemple de code qui utilise cette fonction :</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_sas(<span style="color:#e6db74">&#34;train.sas7bdat&#34;</span>, format<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sas7bdat&#34;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;utf8&#39;</span>)
+data<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">2</span>)
+</code></pre></div><p><ins><strong>App 3</strong></ins> : Afficher les dimensions de la table pop</p>
+<script>
+function myFunctionPandasApp3() {
+    var x = document.getElementById("PandasApp3");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp3()">Voir résultat</button></p>
+<div id="PandasApp3" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pop<span style="color:#f92672">.</span>shape
+</code></pre></div></div>
+<p><ins><strong>App 4</strong></ins> : Afficher les nom de colonnes de la table <em>pop</em></p>
+<script>
+function myFunctionPandasApp4() {
+    var x = document.getElementById("PandasApp4");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp4()">Voir résultat</button></p>
+<div id="PandasApp4" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">pop<span style="color:#f92672">.</span>columns
+</code></pre></div></div>
+<p><ins><strong>App 5</strong></ins> : Lire les données de population du fichier csv <em>commune2019.csv</em> et afficher les 2 premières lignes</p>
+<script>
+function myFunctionPandasApp5() {
+    var x = document.getElementById("PandasApp5");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp5()">Voir résultat</button></p>
+<div id="PandasApp5" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">communes<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;commune2019.csv&#34;</span>, sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;,&#34;</span>, header<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+communes<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">2</span>)
+</code></pre></div></div>
+<p><ins><strong>App 6</strong></ins> : Compter le nombre de valeurs na et non na pour la variable &ldquo;comparent&rdquo;</p>
+<script>
+function myFunctionPandasApp6() {
+    var x = document.getElementById("PandasApp6");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp6()">Voir résultat</button></p>
+<div id="PandasApp6" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">communes<span style="color:#f92672">.</span>comparent<span style="color:#f92672">.</span>isna()<span style="color:#f92672">.</span>value_counts()
+</code></pre></div></div>
+<p><ins><strong>App 7</strong></ins> : Afficher la fréquence de chaque modalité de la variable &ldquo;typecom&rdquo;</p>
+<script>
+function myFunctionPandasApp7() {
+    var x = document.getElementById("PandasApp7");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp7()">Voir résultat</button></p>
+<div id="PandasApp7" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">communes<span style="color:#f92672">.</span>typecom<span style="color:#f92672">.</span>value_counts()
+</code></pre></div></div>
+<p><ins><strong>App 8</strong></ins> : Afficher le type des variables de la table communes</p>
+<script>
+function myFunctionPandasApp8() {
+    var x = document.getElementById("PandasApp8");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp8()">Voir résultat</button></p>
+<div id="PandasApp8" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">communes<span style="color:#f92672">.</span>dtypes
+
+<span style="color:#75715e"># Pour obtenir des informations plus détaillées</span>
+communes<span style="color:#f92672">.</span>info()
+</code></pre></div></div>
+<p><ins><strong>App 9</strong></ins> : Si aucun typage n&rsquo;a été imposé dans le read_csv, on constate que les régions (reg) sont considérées comme float alors que les départements (dep) sont considérés comme un objet. Pourquoi la variable reg n&rsquo;est pas perçue comme un entier ? Pourquoi la variable dep est interprétée comme un objet ?</p>
+<script>
+function myFunctionPandasApp9() {
+    var x = document.getElementById("PandasApp9");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp9()">Voir résultat</button></p>
+<div id="PandasApp9" hidden>
+<div></div>
+<p>La variable relative à la région (<em>reg</em>) est considérée comme un <em>float</em> et non comme un entier car elle contient des valeurs manquantes. La variable relative au département (<em>dep</em>) est interprétée comme un objet python car elle contient des caractères de type <em>string</em> en raison de la présence de la Corse (&ldquo;2A&rdquo; et &ldquo;2B&rdquo;).</p>
+</div>
+<p><ins><strong>NB</strong></ins> : A quoi correspond le type object ?</p>
+<p>Le type Objet de python est le type de base qui s&rsquo;appuie sur la classe parente de toutes les classes.</p>
+<p><ins><strong>App 10</strong></ins> : Afficher les observations relatives à la ville de Lyon</p>
+<script>
+function myFunctionPandasApp10() {
+    var x = document.getElementById("PandasApp10");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp10()">Voir résultat</button></p>
+<div id="PandasApp10" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Solution 1 :</span>
+communes[communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Lyon&#39;</span>]
+
+<span style="color:#75715e"># Solution 2 (surtout utile si on souhaite chercher plusieurs libellés) :</span>
+communes[communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>isin([<span style="color:#e6db74">&#39;Lyon&#39;</span>])]
+</code></pre></div></div>
+<p><ins><strong>App 11</strong></ins> : Etes vous sûrs d&rsquo;afficher toutes les observations associées à la ville de Lyon ? Afficher les observations contenant &ldquo;yon&rdquo;</p>
+<script>
+function myFunctionPandasApp11() {
+    var x = document.getElementById("PandasApp11");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp11()">Voir résultat</button></p>
+<div id="PandasApp11" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Première solution avec la fonction find</span>
+libelle_yon<span style="color:#f92672">=</span>communes[communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>find(<span style="color:#e6db74">&#39;yon&#39;</span>)<span style="color:#f92672">!=-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>libelle
+<span style="color:#66d9ef">print</span>(libelle_yon)
+
+<span style="color:#75715e"># Deuxième solution avec la fonction contains</span>
+libelle_yon_regex<span style="color:#f92672">=</span>communes[communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>contains(<span style="color:#e6db74">&#39;yon&#39;</span>)]
+<span style="color:#66d9ef">print</span>(libelle_yon_regex)
+</code></pre></div></div>
+<p><ins><strong>App 12</strong></ins> : Afficher maintenant les observations contenant &lsquo;lyon&rsquo; en gérant la casse</p>
+<script>
+function myFunctionPandasApp12() {
+    var x = document.getElementById("PandasApp12");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp12()">Voir résultat</button></p>
+<div id="PandasApp12" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">libelle_lyon<span style="color:#f92672">=</span>communes[communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>find(<span style="color:#e6db74">&#39;lyon&#39;</span>)<span style="color:#f92672">!=-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>libelle
+</code></pre></div></div>
+<p><ins><strong>App 13</strong></ins> : Afficher maintenant les libellés présents dans les deux listes (ceux contenant <em>lyon</em> et ceux contenant <em>yon</em>)</p>
+<script>
+function myFunctionPandasApp13() {
+    var x = document.getElementById("PandasApp13");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp13()">Voir résultat</button></p>
+<div id="PandasApp13" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Solution 1</span>
+set(libelle_lyon) <span style="color:#f92672">&amp;</span> set(libelle_yon)
+
+<span style="color:#75715e"># Solution 2</span>
+set(libelle_lyon)<span style="color:#f92672">.</span>intersection(libelle_yon) 
+</code></pre></div></div>
+<p><ins><strong>App 14</strong></ins> : Afficher maintenant les libellés de la liste associée à <em>yon</em> et pas à la liste associée à <em>lyon</em></p>
+<script>
+function myFunctionPandasApp14() {
+    var x = document.getElementById("PandasApp14");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp14()">Voir résultat</button></p>
+<div id="PandasApp14" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">set(libelle_yon)<span style="color:#f92672">.</span>difference(libelle_lyon)
+</code></pre></div></div>
+<p><ins><strong>App 15</strong></ins> : Importer l&rsquo;onglet &ldquo;définitif_patrimoine&rdquo; du fichier Excel <em>isfcom2017</em></p>
+<script>
+function myFunctionPandasApp15() {
+    var x = document.getElementById("PandasApp15");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp15()">Voir résultat</button></p>
+<div id="PandasApp15" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>read_excel(<span style="color:#e6db74">&#34;isfcom2017.xlsx&#34;</span>, sheet_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;définitif_patrimoine&#34;</span>, header<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+<span style="color:#66d9ef">print</span>(isf<span style="color:#f92672">.</span>shape)
+isf<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">2</span>)
+</code></pre></div></div>
+<p><ins><strong>App 16</strong></ins> : Afficher le nom des colonnes de ce <em>dataframe</em></p>
+<script>
+function myFunctionPandasApp16() {
+    var x = document.getElementById("PandasApp16");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp16()">Voir résultat</button></p>
+<div id="PandasApp16" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf<span style="color:#f92672">.</span>columns
+</code></pre></div></div>
+<p><ins><strong>App 17</strong></ins> : Fusionner la table des communes avec cette nouvelle table en ne conservant que les observations communes</p>
+<script>
+function myFunctionPandasApp17() {
+    var x = document.getElementById("PandasApp17");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp17()">Voir résultat</button></p>
+<div id="PandasApp17" hidden>
+<div></div>
+<p>Si vous avez tenté de fusionner les tables sans nettoyer la variable relative au code Insee dans le <em>dataframe isf</em>, vous avez du constater que peu d&rsquo;observations ont matché. On constate que le code Insee dans <em>isf</em> contient des espaces qu&rsquo;il faut préalablement supprimer.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf[<span style="color:#e6db74">&#34;codeCommune&#34;</span>]<span style="color:#f92672">=</span>isf[<span style="color:#e6db74">&#34;Code commune (INSEE)&#34;</span>]<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#34; &#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>)
+
+<span style="color:#75715e"># Plutôt privilégier (car cela permet de se prémunir des cas de double espaces)</span>
+<span style="color:#f92672">import</span> re
+isf[<span style="color:#e6db74">&#34;codeCommune&#34;</span>]<span style="color:#f92672">=</span>[re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39; &#39;</span>,<span style="color:#e6db74">&#39;&#39;</span>, str(x)) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> isf[<span style="color:#e6db74">&#34;Code commune (INSEE)&#34;</span>]]
+</code></pre></div><p>Les <strong>expressions régulières</strong> permettent de repérer des schémas ou des ensembles de séquences de caractères semblables dans une chaîne de caractères. Le package <a href="https://docs.python.org/fr/3/library/re.html" target="_blank"><em>re</em></a> regroupe un ensemble d&rsquo;opérations réalisables à partir d&rsquo;expressions réguières. Ce <a href="http://www.xavierdupre.fr/app/teachpyx/helpsphinx/c_regex/regex.html#a-quoi-ca-sert" target="_blank">tutoriel</a> permet par exemple de s&rsquo;exercer à leur utilisation. Certes ? Mais commment puis-je être vérifier que j&rsquo;ai écrit la bonne expression régulière ? Vous pouvez notamment tester les expressions régulières avec ce <a href="https://regex101.com/" target="_blank">site</a>.</p>
+<p>A partir de là, vous pouvez procéder à la fusion !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf_communes<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>merge(communes, isf, left_on<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;com&#34;</span>, right_on<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;codeCommune&#34;</span>, how<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;inner&#39;</span>)
+<span style="color:#66d9ef">print</span>(isf_communes<span style="color:#f92672">.</span>shape)
+isf_communes<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">2</span>)
+</code></pre></div><p>Vous auriez pu directement nommer le code Insee nettoyé avec le même nom que celui présent dans la table <em>communes</em> (cad <em>com</em>). Dans ce cas, il suffit de directement indiquer <em>on=&quot;com&rdquo;</em> dans la fonction <em>merge</em>.</p>
+</div>
+<p><ins><strong>App 18</strong></ins> : Pourquoi le nombre de lignes de <em>isf_communes</em> est supérieur à celui de <em>isf</em></p>
+<script>
+function myFunctionPandasApp18() {
+    var x = document.getElementById("PandasApp18");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp18()">Voir résultat</button></p>
+<div id="PandasApp18" hidden>
+<div></div>
+<p>On peut notamment constater que des villes sont présentes plusieurs fois dans la table <em>communes</em>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf_communes[isf_communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>isin(list(isf_communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>value_counts()<span style="color:#f92672">.</span>index[isf_communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>value_counts()<span style="color:#f92672">==</span><span style="color:#ae81ff">2</span>]))]
+</code></pre></div></div>
+<p><ins><strong>App 19</strong></ins> : Supprimer les observations associées aux communes déléguées (<em>typecom</em> égal à COMD)</p>
+<script>
+function myFunctionPandasApp19() {
+    var x = document.getElementById("PandasApp19");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp19()">Voir résultat</button></p>
+<div id="PandasApp19" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># On vérifie au préalable la répartition de la variable *typecom*</span>
+isf_communes<span style="color:#f92672">.</span>typecom<span style="color:#f92672">.</span>value_counts()
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf_communes<span style="color:#f92672">=</span>isf_communes[isf_communes<span style="color:#f92672">.</span>typecom<span style="color:#f92672">!=</span><span style="color:#e6db74">&#34;COMD&#34;</span>]
+isf_communes<span style="color:#f92672">.</span>shape
+</code></pre></div></div>
+<p><ins><strong>App 20</strong></ins> : Vérifier que la ville issue de chaque table est identique dans la base fusionnée</p>
+<script>
+function myFunctionPandasApp20() {
+    var x = document.getElementById("PandasApp20");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp20()">Voir résultat</button></p>
+<div id="PandasApp20" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Solution 1 : utiliser l&#39;opérateur &amp;</span>
+probleme<span style="color:#f92672">=</span>isf_communes[(isf_communes<span style="color:#f92672">.</span>ncc<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">!=</span>isf_communes<span style="color:#f92672">.</span>Commune<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#39;-&#39;</span>,<span style="color:#e6db74">&#34; &#34;</span>)) <span style="color:#f92672">&amp;</span> \
+                     (isf_communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">!=</span>isf_communes<span style="color:#f92672">.</span>Commune<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#39;-&#39;</span>,<span style="color:#e6db74">&#34; &#34;</span>))]
+probleme<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">4</span>)
+
+<span style="color:#75715e"># Solution 2 : utiliser numpy (np.all)</span>
+probleme<span style="color:#f92672">=</span>isf_communes[np<span style="color:#f92672">.</span>all([isf_communes<span style="color:#f92672">.</span>ncc<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">!=</span>isf_communes<span style="color:#f92672">.</span>Commune<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#39;-&#39;</span>,<span style="color:#e6db74">&#34; &#34;</span>), 
+        isf_communes<span style="color:#f92672">.</span>libelle<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">!=</span>isf_communes<span style="color:#f92672">.</span>Commune<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>lower()<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>replace(<span style="color:#e6db74">&#39;-&#39;</span>,<span style="color:#e6db74">&#34; &#34;</span>)], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)]
+probleme<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">4</span>)
+</code></pre></div><p>Regardons la répartition des observations posant problème selon la variable <em>typecom</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">probleme<span style="color:#f92672">.</span>typecom<span style="color:#f92672">.</span>value_counts()
+</code></pre></div><p>Les observations relatives aux arrondissements sont correctes, la précision de l&rsquo;arrodissement dans l&rsquo;un des libellés et non dans l&rsquo;autre entraîne mécaniquement la détection de ces observations.</p>
+<p>On peut alors visualiser les observations restantes. Des problèmes d&rsquo;accentuation sont à l&rsquo;orgine des différeces entre les libellés issus des deux tables.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">probleme[probleme<span style="color:#f92672">.</span>typecom<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;COM&#34;</span>][[<span style="color:#e6db74">&#39;ncc&#39;</span>, <span style="color:#e6db74">&#39;libelle&#39;</span>, <span style="color:#e6db74">&#39;Commune&#39;</span>, <span style="color:#e6db74">&#39;Région&#39;</span>, <span style="color:#e6db74">&#39;Départements&#39;</span>]]
+</code></pre></div></div>
+<p><ins><strong>App 21</strong></ins> : Afficher, par ordre décroissant, le nombre total de redevables par région</p>
+<script>
+function myFunctionPandasApp21() {
+    var x = document.getElementById("PandasApp21");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp21()">Voir résultat</button></p>
+<div id="PandasApp21" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf_communes<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#39;Région&#39;</span>)[<span style="color:#e6db74">&#39;nombre de redevables&#39;</span>]<span style="color:#f92672">.</span>sum()<span style="color:#f92672">.</span>sort_values(ascending<span style="color:#f92672">=</span>False)
+</code></pre></div></div>
+<p><ins><strong>App 22</strong></ins> : Afficher, par ordre décroissant, le nombre moyen de redevables par département pour les départements où ce nombre moyen dépasse 500</p>
+<script>
+function myFunctionPandasApp22() {
+    var x = document.getElementById("PandasApp22");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp22()">Voir résultat</button></p>
+<div id="PandasApp22" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">nb_isf_dep<span style="color:#f92672">=</span>isf_communes<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#39;Région&#39;</span>, as_index<span style="color:#f92672">=</span>False)[<span style="color:#e6db74">&#39;nombre de redevables&#39;</span>]<span style="color:#f92672">.</span>sum()<span style="color:#f92672">.</span>sort_values(by<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nombre de redevables&#39;</span>, ascending<span style="color:#f92672">=</span>False)
+nb_isf_dep[nb_isf_dep[<span style="color:#e6db74">&#39;nombre de redevables&#39;</span>]<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">500</span>]
+</code></pre></div><p>Le <em>as_index=False</em> permet de ne pas passer la variable du <em>by</em> en index (les libellés des colonnes utilisées pour le regroupement sont conservées au sein d&rsquo;un <em>dataframe</em>). Au delà du caractère esthétique, ce paramètre qui assure que le résultat du <em>group_by</em> reste un <em>dataframe</em> est particulièrement utile lorsque le <em>dataframe</em> final souhaite être réploité en python. Dans certains cas, on retrouve aussi la fonction <em>reset_index</em>.</p>
+</div>
+<p><ins><strong>App 23</strong></ins> : Afficher le nombre moyen de redevables par région x département</p>
+<script>
+function myFunctionPandasApp23() {
+    var x = document.getElementById("PandasApp23");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp23()">Voir résultat</button></p>
+<div id="PandasApp23" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">nb_moyen_regDep<span style="color:#f92672">=</span>isf_communes<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74">&#39;Région&#39;</span>, <span style="color:#e6db74">&#39;Départements&#39;</span>], as_index<span style="color:#f92672">=</span>False)[<span style="color:#e6db74">&#39;nombre de redevables&#39;</span>]<span style="color:#f92672">.</span>mean()
+nb_moyen_regDep<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">4</span>)
+</code></pre></div></div>
+<p><ins><strong>App 24</strong></ins> : Afficher le nombre moyen de redevables par région x département x typecom en créant une colonne par typecom</p>
+<script>
+function myFunctionPandasApp24() {
+    var x = document.getElementById("PandasApp24");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp24()">Voir résultat</button></p>
+<div id="PandasApp24" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">nb_moyen_regDepTypeCom<span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>crosstab(index<span style="color:#f92672">=</span>[isf_communes[<span style="color:#e6db74">&#39;Région&#39;</span>], isf_communes[<span style="color:#e6db74">&#39;Départements&#39;</span>]], columns<span style="color:#f92672">=</span>isf_communes<span style="color:#f92672">.</span>typecom, values <span style="color:#f92672">=</span>isf_communes[<span style="color:#e6db74">&#39;nombre de redevables&#39;</span>], aggfunc <span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean)<span style="color:#f92672">.</span>reset_index()
+nb_moyen_regDepTypeCom<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">4</span>)
+</code></pre></div></div>
+<p><ins><strong>App 25</strong></ins> : Transposer la table <em>isf_communes</em> pour que les trois variables &lsquo;nombre de redevables&rsquo;,&lsquo;patrimoine moyen en €&rsquo;,&lsquo;impôt moyen en €&rsquo; soient au sein d&rsquo;une même variable en tant que modalité et les valeurs associées dans une seule colonne</p>
+<script>
+function myFunctionPandasApp25() {
+    var x = document.getElementById("PandasApp25");
+    if (x.style.display !== "block") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<p><button onclick="myFunctionPandasApp25()">Voir résultat</button></p>
+<div id="PandasApp25" hidden>
+<div></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">isf_transpose<span style="color:#f92672">=</span>isf_communes<span style="color:#f92672">.</span>melt(id_vars<span style="color:#f92672">=</span>list(set(isf_communes<span style="color:#f92672">.</span>columns)<span style="color:#f92672">.</span>difference(set([<span style="color:#e6db74">&#39;nombre de redevables&#39;</span>, <span style="color:#e6db74">&#39;patrimoine moyen en €&#39;</span>, <span style="color:#e6db74">&#39;impôt moyen en €&#39;</span>]))))
+isf_transpose<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">2</span>)
+</code></pre></div><p>Pour reformater les données, il peut être utile de recourir aux fonctions <em>pivot</em>, <em>stack</em> ou <em>unstack</em>. Pour cela, vous pouvez vous reporter à l'<a href="http://pandas.pydata.org/pandas-docs/stable/user_guide/reshaping.html" target="_blank">aide</a> fournie sur le site officiel de pandas.</p>
+</div>
+<div class="edit-meta">Last updated on 18 Mar 2019 / Published on 18 Mar 2019<br><a href="https://github.com/thingsym/hugo-theme-techdoc/edit/master/content/Explorer/chapter1/_index.md" class="edit-page"><i class="fas fa-pen-square"></i> Edit on GitHub</a></div><nav class="pagination"><a class="nav nav-prev" href="/explorer/" title="Explorer les données"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Explorer les données</a>
+<a class="nav nav-next" href="/explorer/chapter2/" title="Chapitre 2 : Visualiser les données">Next - Chapitre 2 : Visualiser les données <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="https://JulieDjidji.github.io/">Home</a></li>
+
+<li class=""><a href="/getting-started/">Préparer le terrain : installer python</a>
+<ul class="">
+</ul>
+  
+</li>
+
+<li class=""><a href="/fondations/">Poser les fondations</a>
+<ul class="">
+
+<li class=""><a href="/fondations/chapter1/">Chapitre 1 : La syntaxe</a>
+<ul class="">
+</ul>
+  
+</li>
+
+<li class=""><a href="/fondations/chapter2/">Chapitre 2 : Quels objets en python ?</a>
+<ul class="">
+</ul>
+  
+</li>
+
+<li class=""><a href="/fondations/chapter3/">Chapitre 3 : Lecture, écriture et fermeture des fichiers</a>
+</li>
+
+<li class=""><a href="/fondations/chapter4/">Chapitre 4 : Les packages en python</a>
+</li>
+</ul>
+  
+</li>
+
+<li class="parent"><a href="/explorer/">Explorer les données</a>
+<ul class="sub-menu">
+
+<li class="parent active"><a href="/explorer/chapter1/">Chapitre 1 : Manipuler les données</a>
+</li>
+
+<li class=""><a href="/explorer/chapter2/">Chapitre 2 : Visualiser les données</a>
+</li>
+
+<li class=""><a href="/explorer/chapter3/">Chapitre 3 : Manipuler et visualiser des données géographiques</a>
+</li>
+
+<li class=""><a href="/explorer/chapter4/">Chapitre 4 : Modéliser</a>
+</li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/project/">Réaliser un mini projet</a>
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>
